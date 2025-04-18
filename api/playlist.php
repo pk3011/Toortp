@@ -3,7 +3,7 @@ header("Cache-Control: max-age=84000, public");
 header('Content-Type: audio/x-mpegurl');
 header('Content-Disposition: attachment; filename="playlist.m3u"');
 function getAllChannelInfo(): array {
-    $json = @file_get_contents('https://raw.githubusercontent.com/ttoor5/tataplay_urls/main/origin.json');
+    $json = @file_get_contents('https://api.ygxworld.workers.dev/fetcher.json');
     if ($json === false) {
         header("HTTP/1.1 500 Internal Server Error");
         exit;
@@ -30,11 +30,11 @@ foreach ($channels as $channel) {
         continue;
     }
     $extension = pathinfo(parse_url($dashUrl, PHP_URL_PATH), PATHINFO_EXTENSION);
-    $playlistUrl = "https://$serverAddress/{$id}.$extension|X-Forwarded-For=59.178.72.184";
+    $playlistUrl = "https://$serverAddress/{$id}.$extension|X-Forwarded-For=59.178.74.184&Origin=https://watch.tataplay.com&Referer=https://watch.tataplay.com/";
     $m3u8PlaylistFile .= "#EXTINF:-1 tvg-id=\"{$id}\" tvg-country=\"IN\" catchup-days=\"7\" tvg-logo=\"https://mediaready.videoready.tv/tatasky-epg/image/fetch/f_auto,fl_lossy,q_auto,h_250,w_250/{$channel['channel_logo']}\" group-title=\"{$channel['channel_genre'][0]}\",{$channel['channel_name']}\n";
     $m3u8PlaylistFile .= "#KODIPROP:inputstream.adaptive.license_type=clearkey\n";
     $m3u8PlaylistFile .= "#KODIPROP:inputstream.adaptive.license_key=https://tpck.drmlive-01.workers.dev/?id={$id}\n";
-    $m3u8PlaylistFile .= "#EXTVLCOPT:http-user-agent=third-party\n";
+    $m3u8PlaylistFile .= "#EXTVLCOPT:http-user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/135.0.0.0 Safari/537.36\n";
     $m3u8PlaylistFile .= "$playlistUrl\n\n";
 }
 $additionalEntries = <<<EOT
